@@ -145,4 +145,42 @@ class TagTable extends CoreEntityTable {
 
         return $id;
     }
+
+    /**
+     * Add Minimal Entry - used for Select2
+     *
+     * @param $sLabel Label of new entity
+     * @param $sForm name of form
+     * @param $sTag name of tag
+     * @return int id of new entry
+     * @since 1.0.0
+     */
+    public function addMinimal($sLabel,$sForm,$sTag) {
+        # Stripe idfs from fieldname to get tagname
+        $sTag = substr($sTag,0,strlen($sTag)-strlen('_idfs'));
+
+        # get tag
+        $oTag = CoreController::$aCoreTables['core-tag']->select(['tag_key'=>$sTag]);
+        if(count($oTag) > 0) {
+            $oTag = $oTag->current();
+            $aData = [
+                'entity_form_idfs'=>$sForm,
+                'tag_idfs'=>$oTag->Tag_ID, // get id from core_tag
+                'tag_value'=>$sLabel,
+                'parent_tag_idfs'=>0,
+                'created_by'=>CoreController::$oSession->oUser->getID(),
+                'created_date'=>date('Y-m-d H:i:s',time()),
+                'modified_by'=>CoreController::$oSession->oUser->getID(),
+                'modified_date'=>date('Y-m-d H:i:s',time()),
+            ];
+
+            # Insert Tag
+            $this->oTableGateway->insert($aData);
+
+            # Return ID
+            return $this->oTableGateway->lastInsertValue;
+        } else {
+            return 0;
+        }
+    }
 }
