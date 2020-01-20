@@ -81,8 +81,12 @@ class ApiController extends CoreController {
 
         $aItems = [];
 
+        $aFilter = explode('_',$this->params()->fromRoute('filter','none_0'));
+        $sForm = $aFilter[0];
+        $iFilterID = (int)$aFilter[1];
+
         # Get All Tag Entities from Database
-        $oItemsDB = $this->oTableGateway->fetchAll(false);
+        $oItemsDB = $this->oTableGateway->fetchAll(false,['entity_form_idfs'=>$sForm,'tag_idfs'=>$iFilterID]);
         if(count($oItemsDB) > 0) {
             foreach($oItemsDB as $oItem) {
                 if($bSelect2) {

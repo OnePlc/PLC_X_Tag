@@ -46,8 +46,10 @@ class TagTable extends CoreEntityTable {
      * @return Paginator Paginated Table Connection
      * @since 1.0.0
      */
-    public function fetchAll($bPaginated = false) {
+    public function fetchAll($bPaginated = false,$aWhere = []) {
         $oSel = new Select($this->oTableGateway->getTable());
+
+        $oSel->where($aWhere);
 
         # Return Paginator or Raw ResultSet based on selection
         if ($bPaginated) {

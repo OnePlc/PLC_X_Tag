@@ -48,4 +48,14 @@ class Tag extends CoreEntityModel {
 
         $this->updateDynamicFields($aData);
     }
+
+    /**
+     * Get Tag Label as String
+     *
+     * @return string
+     * @since 1.0.0
+     */
+    public function getLabel() {
+        return $this->tag_value;
+    }
 }

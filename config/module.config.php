@@ -41,10 +41,10 @@ return [
             'tag-api' => [
                 'type'    => Segment::class,
                 'options' => [
-                    'route' => '/tag/api[/:action[/:id]]',
+                    'route' => '/tag/api[/:action[/:filter]]',
                     'constraints' => [
                         'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
-                        'id'     => '[0-9]+',
+                        'filter' => '[a-zA-Z][a-zA-Z0-9_-]+',
                     ],
                     'defaults' => [
                         'controller' => Controller\ApiController::class,
