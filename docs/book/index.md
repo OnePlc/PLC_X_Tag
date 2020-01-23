@@ -1,4 +1,4 @@
-# oneplace-core
+# oneplace-tag
 
 onePlace Tag Module. Add Tags to every Module in onePlace with ease!
 

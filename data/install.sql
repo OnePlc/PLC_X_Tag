@@ -5,10 +5,10 @@ CREATE TABLE `core_tag` (
   `Tag_ID` int(11) NOT NULL,
   `tag_key` varchar(50) NOT NULL,
   `tag_label` varchar(255) NOT NULL,
-  `created_by` int(11) NOT NULL,
-  `created_date` datetime NOT NULL,
-  `modified_by` int(11) NOT NULL,
-  `modified_date` datetime NOT NULL
+  `created_by` int(11) NOT NULL DEFAULT 1,
+  `created_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00',
+  `modified_by` int(11) NOT NULL DEFAULT 1,
+  `modified_date` datetime NOT NULL DEFAULT '0000-00-00 00:00:00'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 ALTER TABLE `core_tag`
@@ -99,7 +99,8 @@ INSERT INTO `core_form_field` (`Field_ID`, `type`, `label`, `fieldkey`, `tab`, `
 (NULL, 'text', 'Name', 'tag_label', 'tag-base', 'tag-single', 'col-md-3', '/tag/view/##ID##', '', 0, 1, 0, '', '', ''),
 (NULL, 'text', 'Key', 'tag_key', 'tag-base', 'tag-single', 'col-md-3', '/tag/view/##ID##', '', 0, 1, 1, '', '', ''),
 (NULL, 'partial', 'Entity Tags', 'entitytags', 'tag-entitytags', 'tag-single', 'col-md-12', '', '', '0', '1', '0', '', '', ''),
-(NULL, 'text', 'Name', 'tag_value', 'entitytag-base', 'entitytag-single', 'col-md-3', '/tag/entity/view/##ID##', '', '0', '1', '0', '', '', '');
+(NULL, 'text', 'Name', 'tag_value', 'entitytag-base', 'entitytag-single', 'col-md-3', '/tag/entity/view/##ID##', '', '0', '1', '0', '', '', ''),
+(NULL, 'text', 'Form Name', 'entity_form_idfs', 'entitytag-base', 'entitytag-single', 'col-md-3', '', '', '0', '1', '0', '', '', '');
 
 --
 -- TAG - Core Index Table
