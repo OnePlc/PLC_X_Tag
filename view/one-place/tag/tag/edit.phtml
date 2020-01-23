@@ -1,3 +1,12 @@
 <h2>Edit Tag</h2>
 
 <?= $this->partial('partial/basicform', ['sFormName'=>$sFormName,'oItem'=>$oTag]); ?>
+
+<script>
+    $(function() {
+        $('input[name="tag-single_tag_label"]').on('blur',function() {
+            var sNewKey = $(this).val().toLowerCase().replace(' ','-');
+            $('input[name="tag-single_tag_key"]').val(sNewKey);
+        });
+    });
+</script>

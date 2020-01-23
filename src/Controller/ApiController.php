@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace OnePlace\Tag\Controller;
 
 use Application\Controller\CoreController;
+use OnePlace\Tag\Model\EntityTagTable;
 use OnePlace\Tag\Model\TagTable;
 use Laminas\View\Model\ViewModel;
 use Laminas\Db\Adapter\AdapterInterface;
@@ -37,7 +38,7 @@ class ApiController extends CoreController {
      * @param TagTable $oTableGateway
      * @since 1.0.0
      */
-    public function __construct(AdapterInterface $oDbAdapter,TagTable $oTableGateway,$oServiceManager) {
+    public function __construct(AdapterInterface $oDbAdapter,EntityTagTable $oTableGateway,$oServiceManager) {
         parent::__construct($oDbAdapter,$oTableGateway,$oServiceManager);
         $this->oTableGateway = $oTableGateway;
         $this->sSingleForm = 'tag-single';

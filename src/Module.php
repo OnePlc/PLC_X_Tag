@@ -57,6 +57,16 @@ class Module {
                     $dbAdapter = $container->get(AdapterInterface::class);
                     $resultSetPrototype = new ResultSet();
                     $resultSetPrototype->setArrayObjectPrototype(new Model\Tag($dbAdapter));
+                    return new TableGateway('core_tag', $dbAdapter, null, $resultSetPrototype);
+                },
+                Model\EntityTagTable::class => function($container) {
+                    $tableGateway = $container->get(Model\EntityTagTableGateway::class);
+                    return new Model\EntityTagTable($tableGateway,$container);
+                },
+                Model\EntityTagTableGateway::class => function ($container) {
+                    $dbAdapter = $container->get(AdapterInterface::class);
+                    $resultSetPrototype = new ResultSet();
+                    $resultSetPrototype->setArrayObjectPrototype(new Model\EntityTag($dbAdapter));
                     return new TableGateway('core_entity_tag', $dbAdapter, null, $resultSetPrototype);
                 },
             ],
@@ -69,6 +79,7 @@ class Module {
     public function getControllerConfig() : array {
         return [
             'factories' => [
+                # Tag Main Controller
                 Controller\TagController::class => function($container) {
                     $oDbAdapter = $container->get(AdapterInterface::class);
                     return new Controller\TagController(
@@ -77,11 +88,21 @@ class Module {
                         $container
                     );
                 },
+                # Entity Tag Controller
+                Controller\EntityController::class => function($container) {
+                    $oDbAdapter = $container->get(AdapterInterface::class);
+                    return new Controller\EntityController(
+                        $oDbAdapter,
+                        $container->get(Model\EntityTagTable::class),
+                        $container
+                    );
+                },
+                # Api Controller
                 Controller\ApiController::class => function($container) {
                     $oDbAdapter = $container->get(AdapterInterface::class);
                     return new Controller\ApiController(
                         $oDbAdapter,
-                        $container->get(Model\TagTable::class),
+                        $container->get(Model\EntityTagTable::class),
                         $container
                     );
                 },

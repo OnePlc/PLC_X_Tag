@@ -1,0 +1,29 @@
+<?php
+# Get Partial Data
+$aEntityTags = $this->aPartialData['aEntityTags'];
+
+$aTagsByForm = [];
+/**
+ * Sort by Form
+ */
+foreach($aEntityTags as $oTag) {
+    if(!array_key_exists($oTag->entity_form_idfs,$aTagsByForm)) {
+        $aTagsByForm[$oTag->entity_form_idfs] = [];
+    }
+    $aTagsByForm[$oTag->entity_form_idfs][] = $oTag;
+}
+
+/**
+ * Loop and print
+ */
+foreach(array_keys($aTagsByForm) as $sForm) {
+    $aTagsForForm = $aTagsByForm[$sForm]; ?>
+    <h3><?=$sForm?></h3>
+    <ul class="list-group">
+        <?php foreach($aTagsForForm as $oTag) { ?>
+        <li class="list-group-item"><?=$oTag->tag_value?></li>
+        <?php } ?>
+    </ul>
+<?php
+}
+?>

@@ -19,12 +19,13 @@ namespace OnePlace\Tag\Controller;
 
 use Application\Controller\CoreController;
 use Application\Model\CoreEntityModel;
+use OnePlace\Tag\Model\EntityTag;
 use OnePlace\Tag\Model\Tag;
-use OnePlace\Tag\Model\TagTable;
+use OnePlace\Tag\Model\EntityTagTable;
 use Laminas\View\Model\ViewModel;
 use Laminas\Db\Adapter\AdapterInterface;
 
-class TagController extends CoreController {
+class EntityController extends CoreController {
     /**
      * Tag Table Object
      *
@@ -39,9 +40,9 @@ class TagController extends CoreController {
      * @param TagTable $oTableGateway
      * @since 1.0.0
      */
-    public function __construct(AdapterInterface $oDbAdapter,TagTable $oTableGateway,$oServiceManager) {
+    public function __construct(AdapterInterface $oDbAdapter,EntityTagTable $oTableGateway,$oServiceManager) {
         $this->oTableGateway = $oTableGateway;
-        $this->sSingleForm = 'tag-single';
+        $this->sSingleForm = 'entitytag-single';
         parent::__construct($oDbAdapter,$oTableGateway,$oServiceManager);
 
         if($oTableGateway) {
@@ -50,39 +51,6 @@ class TagController extends CoreController {
                 CoreEntityModel::$aEntityTables[$this->sSingleForm] = $oTableGateway;
             }
         }
-    }
-
-    /**
-     * Tag Index
-     *
-     * @since 1.0.0
-     * @return ViewModel - View Object with Data from Controller
-     */
-    public function indexAction() {
-        # Set Layout based on users theme
-        $this->setThemeBasedLayout('tag');
-
-        # Add Buttons for breadcrumb
-        $this->setViewButtons('tag-index');
-
-        # Set Table Rows for Index
-        $this->setIndexColumns('tag-index');
-
-        # Get Paginator
-        $oPaginator = $this->oTableGateway->fetchAll(true);
-        $iPage = (int) $this->params()->fromQuery('page', 1);
-        $iPage = ($iPage < 1) ? 1 : $iPage;
-        $oPaginator->setCurrentPageNumber($iPage);
-        $oPaginator->setItemCountPerPage(3);
-
-        # Log Performance in DB
-        $aMeasureEnd = getrusage();
-        $this->logPerfomance('tag-index',$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"utime"),$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"stime"));
-
-        return new ViewModel([
-            'sTableName'=>'tag-index',
-            'aItems'=>$oPaginator,
-        ]);
     }
 
     /**
@@ -95,13 +63,15 @@ class TagController extends CoreController {
         # Set Layout based on users theme
         $this->setThemeBasedLayout('tag');
 
+        $iTagID = $this->params()->fromRoute('filter', 0);
+
         # Get Request to decide wether to save or display form
         $oRequest = $this->getRequest();
 
         # Display Add Form
         if(!$oRequest->isPost()) {
             # Add Buttons for breadcrumb
-            $this->setViewButtons('tag-single');
+            $this->setViewButtons('entitytag-single');
 
             # Load Tabs for View Form
             $this->setViewTabs($this->sSingleForm);
@@ -111,29 +81,32 @@ class TagController extends CoreController {
 
             # Log Performance in DB
             $aMeasureEnd = getrusage();
-            $this->logPerfomance('tag-add',$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"utime"),$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"stime"));
+            $this->logPerfomance('entitytag-add',$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"utime"),$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"stime"));
 
             return new ViewModel([
                 'sFormName' => $this->sSingleForm,
+                'iTagID'=>$iTagID,
             ]);
         }
 
         # Get and validate Form Data
         $aFormData = $this->parseFormData($_REQUEST);
 
+        $aFormData['tag_idfs'] = $_REQUEST['ref_idfs'];
+
         # Save Add Form
-        $oTag = new Tag($this->oDbAdapter);
+        $oTag = new EntityTag($this->oDbAdapter);
         $oTag->exchangeArray($aFormData);
         $iTagID = $this->oTableGateway->saveSingle($oTag);
         $oTag = $this->oTableGateway->getSingle($iTagID);
 
         # Log Performance in DB
         $aMeasureEnd = getrusage();
-        $this->logPerfomance('tag-save',$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"utime"),$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"stime"));
+        $this->logPerfomance('entitytag-save',$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"utime"),$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"stime"));
 
         # Display Success Message and View New Tag
-        $this->flashMessenger()->addSuccessMessage('Tag successfully created');
-        return $this->redirect()->toRoute('tag',['action'=>'view','id'=>$iTagID]);
+        $this->flashMessenger()->addSuccessMessage('Entity Tag successfully created');
+        return $this->redirect()->toRoute('tag',['action'=>'view','id'=>$aFormData['tag_idfs']]);
     }
 
     /**

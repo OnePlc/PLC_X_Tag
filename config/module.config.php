@@ -52,6 +52,20 @@ return [
                     ],
                 ],
             ],
+            'tag-entity' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/tag/entity[/:action[/:filter]]',
+                    'constraints' => [
+                        'action' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'filter' => '[a-zA-Z0-9_-]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\EntityController::class,
+                        'action'     => 'index',
+                    ],
+                ],
+            ],
         ],
     ],
 

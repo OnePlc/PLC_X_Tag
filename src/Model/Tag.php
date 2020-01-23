@@ -18,7 +18,8 @@ namespace OnePlace\Tag\Model;
 use Application\Model\CoreEntityModel;
 
 class Tag extends CoreEntityModel {
-    public $tag_value;
+    public $tag_key;
+    public $tag_label;
 
     /**
      * Tag constructor.
@@ -43,8 +44,9 @@ class Tag extends CoreEntityModel {
      * @since 1.0.0
      */
     public function exchangeArray(array $aData) {
-        $this->id = !empty($aData['Entitytag_ID']) ? $aData['Entitytag_ID'] : 0;
-        $this->tag_value = !empty($aData['tag_value']) ? $aData['tag_value'] : '';
+        $this->id = !empty($aData['Tag_ID']) ? $aData['Tag_ID'] : 0;
+        $this->tag_label = !empty($aData['tag_label']) ? $aData['tag_label'] : '';
+        $this->tag_key = !empty($aData['tag_key']) ? $aData['tag_key'] : '';
 
         $this->updateDynamicFields($aData);
     }
@@ -56,6 +58,16 @@ class Tag extends CoreEntityModel {
      * @since 1.0.0
      */
     public function getLabel() {
-        return $this->tag_value;
+        return $this->tag_label;
+    }
+
+    /**
+     * Get Tag Key as String
+     *
+     * @return string
+     * @since 1.0.1
+     */
+    public function getKey() {
+        return $this->tag_key;
     }
 }

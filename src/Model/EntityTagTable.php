@@ -24,7 +24,7 @@ use Laminas\Db\Sql\Where;
 use Laminas\Paginator\Paginator;
 use Laminas\Paginator\Adapter\DbSelect;
 
-class TagTable extends CoreEntityTable {
+class EntityTagTable extends CoreEntityTable {
 
     /**
      * TagTable constructor.
@@ -84,7 +84,7 @@ class TagTable extends CoreEntityTable {
      */
     public function getSingle($id) {
         $id = (int) $id;
-        $rowset = $this->oTableGateway->select(['Tag_ID' => $id]);
+        $rowset = $this->oTableGateway->select(['Entitytag_ID' => $id]);
         $row = $rowset->current();
         if (! $row) {
             throw new \RuntimeException(sprintf(
@@ -103,15 +103,17 @@ class TagTable extends CoreEntityTable {
      * @return int Tag ID
      * @since 1.0.0
      */
-    public function saveSingle(Tag $oTag) {
+    public function saveSingle(EntityTag $oEntityTag) {
         $aData = [
-            'tag_label' => $oTag->tag_label,
-            'tag_key' => $oTag->tag_key,
+            'entity_form_idfs' => $oEntityTag->entity_form_idfs,
+            'tag_value' => $oEntityTag->tag_value,
+            'tag_idfs' => $oEntityTag->tag_idfs,
+            'parent_tag_idfs' => $oEntityTag->parent_tag_idfs,
         ];
 
-        $aData = $this->attachDynamicFields($aData,$oTag);
+        $aData = $this->attachDynamicFields($aData,$oEntityTag);
 
-        $id = (int) $oTag->id;
+        $id = (int) $oEntityTag->id;
 
         if ($id === 0) {
             # Add Metadata
@@ -142,7 +144,7 @@ class TagTable extends CoreEntityTable {
         $aData['modified_date'] = date('Y-m-d H:i:s',time());
 
         # Update Tag
-        $this->oTableGateway->update($aData, ['Tag_ID' => $id]);
+        $this->oTableGateway->update($aData, ['Entitytag_ID' => $id]);
 
         return $id;
     }

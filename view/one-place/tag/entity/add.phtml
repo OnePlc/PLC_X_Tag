@@ -1,6 +1,6 @@
-<h1>Add new tag</h1>
+<h1>Add new entity tag</h1>
 
-<?= $this->partial('partial/basicform', ['sFormName'=>$sFormName]); ?>
+<?= $this->partial('partial/basicform', ['sFormName'=>$sFormName,'iRefIDFS'=>$iTagID]); ?>
 <script>
     $(function() {
        $('input[name="tag-single_tag_label"]').on('blur',function() {
