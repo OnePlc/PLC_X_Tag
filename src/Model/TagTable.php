@@ -176,10 +176,10 @@ class TagTable extends CoreEntityTable {
             ];
 
             # Insert Tag
-            $this->oTableGateway->insert($aData);
+            CoreController::$aCoreTables['core-entity-tag']->insert($aData);
 
             # Return ID
-            return $this->oTableGateway->lastInsertValue;
+            return CoreController::$aCoreTables['core-entity-tag']->lastInsertValue;
         } else {
             return 0;
         }
