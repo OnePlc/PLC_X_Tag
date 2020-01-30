@@ -176,10 +176,10 @@ class TagTable extends CoreEntityTable {
             ];
 
             # Insert Tag
-            CoreController::$aCoreTables['core-entity-tag']->insert($aData);
+            CoreController::$aCoreTables['core-tag']->insert($aData);
 
             # Return ID
-            return CoreController::$aCoreTables['core-entity-tag']->lastInsertValue;
+            return CoreController::$aCoreTables['core-tag']->lastInsertValue;
         } else {
             return 0;
         }

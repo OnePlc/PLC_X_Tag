@@ -63,6 +63,12 @@ class EntityController extends CoreController {
         # Set Layout based on users theme
         $this->setThemeBasedLayout('tag');
 
+        # Check license
+        if(!$this->checkLicense('tag')) {
+            $this->flashMessenger()->addErrorMessage('You have no active license for tag');
+            $this->redirect()->toRoute('home');
+        }
+
         $iTagID = $this->params()->fromRoute('filter', 0);
 
         # Get Request to decide wether to save or display form
@@ -118,6 +124,12 @@ class EntityController extends CoreController {
     public function editAction() {
         # Set Layout based on users theme
         $this->setThemeBasedLayout('tag');
+
+        # Check license
+        if(!$this->checkLicense('tag')) {
+            $this->flashMessenger()->addErrorMessage('You have no active license for tag');
+            $this->redirect()->toRoute('home');
+        }
 
         # Get Request to decide wether to save or display form
         $oRequest = $this->getRequest();
@@ -185,6 +197,12 @@ class EntityController extends CoreController {
     public function viewAction() {
         # Set Layout based on users theme
         $this->setThemeBasedLayout('tag');
+
+        # Check license
+        if(!$this->checkLicense('tag')) {
+            $this->flashMessenger()->addErrorMessage('You have no active license for tag');
+            $this->redirect()->toRoute('home');
+        }
 
         # Get Tag ID from URL
         $iTagID = $this->params()->fromRoute('id', 0);

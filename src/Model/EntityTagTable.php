@@ -160,11 +160,18 @@ class EntityTagTable extends CoreEntityTable {
      */
     public function addMinimal($sLabel,$sForm,$sTag) {
         # Stripe idfs from fieldname to get tagname
-        $sTag = substr($sTag,0,strlen($sTag)-strlen('_idfs'));
+        $bIsIDFS = stripos($sTag,'_idfs');
+        if($bIsIDFS === false) {
 
+        } else {
+            $sTag = substr($sTag,0,strlen($sTag)-strlen('_idfs'));
+        }
+
+        echo 'save tag '.$sTag;
         # get tag
         $oTag = CoreController::$aCoreTables['core-tag']->select(['tag_key'=>$sTag]);
         if(count($oTag) > 0) {
+            echo 'got tag';
             $oTag = $oTag->current();
             $aData = [
                 'entity_form_idfs'=>$sForm,
@@ -178,10 +185,10 @@ class EntityTagTable extends CoreEntityTable {
             ];
 
             # Insert Tag
-            $this->oTableGateway->insert($aData);
+            CoreController::$aCoreTables['core-entity-tag']->insert($aData);
 
             # Return ID
-            return $this->oTableGateway->lastInsertValue;
+            return CoreController::$aCoreTables['core-entity-tag']->lastInsertValue;
         } else {
             return 0;
         }
