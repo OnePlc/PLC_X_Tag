@@ -83,17 +83,7 @@ class EntityTagTable extends CoreEntityTable {
      * @since 1.0.0
      */
     public function getSingle($id) {
-        $id = (int) $id;
-        $rowset = $this->oTableGateway->select(['Entitytag_ID' => $id]);
-        $row = $rowset->current();
-        if (! $row) {
-            throw new \RuntimeException(sprintf(
-                'Could not find tag with identifier %d',
-                $id
-            ));
-        }
-
-        return $row;
+        return $this->getSingleEntity($id,'Entitytag_ID');
     }
 
     /**
