@@ -66,6 +66,20 @@ return [
                     ],
                 ],
             ],
+            'tag-api-list' => [
+                'type'    => Segment::class,
+                'options' => [
+                    'route' => '/tag/api/list[/:form[/:tagtype]]',
+                    'constraints' => [
+                        'form' => '[a-zA-Z][a-zA-Z0-9_-]*',
+                        'tagtype' => '[a-zA-Z][a-zA-Z0-9_-]+',
+                    ],
+                    'defaults' => [
+                        'controller' => Controller\ApiController::class,
+                        'action'     => 'list',
+                    ],
+                ],
+            ],
         ],
     ],
 
