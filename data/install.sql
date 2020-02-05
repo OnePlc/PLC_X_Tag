@@ -70,7 +70,7 @@ INSERT INTO `permission` (`permission_key`, `module`, `label`, `nav_label`, `nav
 -- TAG - Core Form
 --
 INSERT INTO `core_form` (`form_key`, `label`, `entity_class`, `entity_tbl_class`) VALUES
-('entitytag-single', 'Entity Tag', 'OnePlace\\Tag\\Model\\Entitytag', 'OnePlace\\Tag\\Model\\EntitytagTable'),
+('entitytag-single', 'Entity Tag', 'OnePlace\\Tag\\Model\\Entitytag', 'OnePlace\\Tag\\Model\\EntityTagTable'),
 ('tag-single', 'Tag', 'OnePlace\\Tag\\Model\\Tag', 'OnePlace\\Tag\\Model\\TagTable');
 
 --

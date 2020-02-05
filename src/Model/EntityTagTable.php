@@ -49,7 +49,30 @@ class EntityTagTable extends CoreEntityTable {
     public function fetchAll($bPaginated = false,$aWhere = []) {
         $oSel = new Select($this->oTableGateway->getTable());
 
-        $oSel->where($aWhere);
+        # Build where
+        $oWh = new Where();
+        foreach(array_keys($aWhere) as $sWh) {
+            $bIsLike = stripos($sWh,'-like');
+            if($bIsLike === false) {
+
+            } else {
+                # its a like
+                $sFieldKey = substr($sWh,0,strlen($sWh)-strlen('-like'));
+                if($sFieldKey == 'label') {
+                    $sFieldKey = 'tag_value';
+                }
+                $oWh->like($sFieldKey,$aWhere[$sWh].'%');
+            }
+
+            $bIsIDFS = stripos($sWh,'_idfs');
+            if($bIsIDFS === false) {
+
+            } else {
+                # its a like
+                $oWh->equalTo($sWh,$aWhere[$sWh]);
+            }
+        }
+        $oSel->where($oWh);
 
         # Return Paginator or Raw ResultSet based on selection
         if ($bPaginated) {
