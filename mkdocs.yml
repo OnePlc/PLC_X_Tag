@@ -2,6 +2,7 @@ docs_dir: docs/book
 site_dir: docs/html
 nav:
   - Home: index.md
+  - Add Tag: addtag.md
 site_name: oneplace-tag
 site_description: "onePlace Tag Module"
 repo_url: 'https://github.com/OnePlc/PLC_X_Tag'

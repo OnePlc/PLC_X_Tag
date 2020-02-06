@@ -83,6 +83,14 @@ class ApiController extends CoreController {
         }
 
         $bSelect2 = true;
+        $sListMode = 'select2';
+        # Get list mode from query
+        if(isset($_REQUEST['listmode'])) {
+            if($_REQUEST['listmode'] == 'info') {
+                $bSelect2 = false;
+                $sListMode = 'info';
+            }
+        }
 
         /**
          * todo: enforce to use /api/contact instead of /contact/api so we can do security checks in main api controller
@@ -112,10 +120,14 @@ class ApiController extends CoreController {
             foreach($oItemsDB as $oItem) {
                 if($bSelect2) {
                     $aItems[] = ['id'=>$oItem->getID(),'text'=>$oItem->getLabel()];
+                } elseif($sListMode == 'info') {
+                    $iCount = count(CoreController::$aCoreTables['core-entity-tag-entity']->select(['entity_tag_idfs'=>$oItem->getID(),'entity_type'=>'article']));
+                    if($iCount > 0) {
+                        $aItems[] = ['id'=>$oItem->getID(),'label'=>$oItem->getLabel(),'count'=>$iCount];
+                    }
                 } else {
                     $aItems[] = $oItem;
                 }
-
             }
         }
 
