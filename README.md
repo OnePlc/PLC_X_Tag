@@ -2,6 +2,11 @@
 
 [![Build Status](https://travis-ci.com/OnePlc/PLC_X_Tag.svg?branch=master)](https://travis-ci.com/OnePlc/PLC_X_Tag)
 [![Coverage Status](https://coveralls.io/repos/github/OnePlc/PLC_X_Tag/badge.svg?branch=master)](https://coveralls.io/github/OnePlc/PLC_X_Tag?branch=master)
+![Packagist Downloads](https://img.shields.io/packagist/dt/oneplace/oneplace-tag)
+![Stable Version](https://img.shields.io/packagist/v/oneplace/oneplace-tag)
+![GitHub Release Date](https://img.shields.io/github/release-date/oneplc/plc_x_tag)
+![Open Issues](https://img.shields.io/github/issues-raw/oneplc/plc_x_tag)
+![Discourse status](https://img.shields.io/discourse/status?server=https%3A%2F%2Fdiscourse.1plc.ch)
 
 ## Introduction
 
