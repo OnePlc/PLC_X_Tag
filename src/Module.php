@@ -23,14 +23,15 @@ use Laminas\ModuleManager\ModuleManager;
 use Laminas\Session\Config\StandardConfig;
 use Laminas\Session\SessionManager;
 use Laminas\Session\Container;
+use Laminas\EventManager\EventInterface as Event;
 
 class Module {
     /**
      * Module Version
      *
-     * @since 1.0.5
+     * @since 1.0.0
      */
-    const VERSION = '1.0.5';
+    const VERSION = '1.0.6';
 
     /**
      * Load module config file
@@ -101,6 +102,15 @@ class Module {
                 Controller\ApiController::class => function($container) {
                     $oDbAdapter = $container->get(AdapterInterface::class);
                     return new Controller\ApiController(
+                        $oDbAdapter,
+                        $container->get(Model\EntityTagTable::class),
+                        $container
+                    );
+                },
+                # Api Controller
+                Controller\InstallController::class => function($container) {
+                    $oDbAdapter = $container->get(AdapterInterface::class);
+                    return new Controller\InstallController(
                         $oDbAdapter,
                         $container->get(Model\EntityTagTable::class),
                         $container
