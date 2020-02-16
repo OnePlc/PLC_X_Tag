@@ -114,8 +114,13 @@ class ApiController extends CoreController {
         }
         $oTag = $oTag->current();
 
+        $aTagWhere = ['entity_form_idfs'=>$sForm,'tag_idfs'=>$oTag->Tag_ID];
+        if(isset($_REQUEST['q'])) {
+            $aTagWhere['label-like'] = $_REQUEST['q'];
+        }
+
         # Get All Tag Entities from Database
-        $oItemsDB = $this->oTableGateway->fetchAll(false,['entity_form_idfs'=>$sForm,'tag_idfs'=>$oTag->Tag_ID]);
+        $oItemsDB = $this->oTableGateway->fetchAll(false,$aTagWhere);
         if(count($oItemsDB) > 0) {
             foreach($oItemsDB as $oItem) {
                 if($bSelect2) {

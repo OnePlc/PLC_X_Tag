@@ -61,7 +61,7 @@ class EntityTagTable extends CoreEntityTable {
                 if($sFieldKey == 'label') {
                     $sFieldKey = 'tag_value';
                 }
-                $oWh->like($sFieldKey,$aWhere[$sWh].'%');
+                $oWh->like($sFieldKey,'%'.$aWhere[$sWh].'%');
             }
 
             $bIsIDFS = stripos($sWh,'_idfs');
