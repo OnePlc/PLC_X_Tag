@@ -108,6 +108,11 @@ INSERT INTO `core_form_field` (`Field_ID`, `type`, `label`, `fieldkey`, `tab`, `
 INSERT INTO `core_index_table` (`table_name`, `form`, `label`) VALUES ('tag-index', 'tag-single', 'Tag Index');
 
 --
+-- Tag Key for multiselect
+--
+ALTER TABLE `core_form_field` ADD `tag_key` VARCHAR(150) NOT NULL DEFAULT '' AFTER `url_list`;
+
+--
 -- Save
 --
 COMMIT;
