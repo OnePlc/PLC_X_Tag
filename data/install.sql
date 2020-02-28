@@ -113,6 +113,11 @@ INSERT INTO `core_index_table` (`table_name`, `form`, `label`) VALUES ('tag-inde
 ALTER TABLE `core_form_field` ADD `tag_key` VARCHAR(150) NOT NULL DEFAULT '' AFTER `url_list`;
 
 --
+-- icon
+--
+INSERT INTO `settings` (`settings_key`, `settings_value`) VALUES ('tag-icon', 'fas fa-tags');
+
+--
 -- Save
 --
 COMMIT;
