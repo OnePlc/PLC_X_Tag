@@ -46,7 +46,7 @@ class EntityTagTable extends CoreEntityTable {
      * @return Paginator Paginated Table Connection
      * @since 1.0.0
      */
-    public function fetchAll($bPaginated = false,$aWhere = []) {
+    public function fetchAll($bPaginated = false,$aWhere = [],$sSort = 'created_date DESC') {
         $oSel = new Select($this->oTableGateway->getTable());
 
         # Build where
