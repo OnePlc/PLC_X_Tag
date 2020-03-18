@@ -30,6 +30,7 @@ CREATE TABLE `core_entity_tag` (
   `entity_form_idfs` varchar(50) NOT NULL,
   `tag_idfs` int(11) NOT NULL,
   `tag_value` varchar(255) NOT NULL,
+  `tag_key` varchar(100) NOT NULL DEFAULT '',
   `tag_color` varchar(10) NOT NULL DEFAULT '',
   `tag_icon` varchar(25) NOT NULL DEFAULT '',
   `parent_tag_idfs` int(11) NOT NULL DEFAULT 0,

@@ -148,6 +148,66 @@ class ApiController extends CoreController {
                 $aCountWh['article.show_on_web_idfs'] = 2;
             }
         }
+        if(isset($_REQUEST['filter'])) {
+            $aFilters = json_decode($_REQUEST['filter']);
+            if(is_array($aFilters)) {
+                $aFilterValues = json_decode($_REQUEST['filtervalue']);
+                $i = 0;
+                foreach($aFilters as $sFilter) {
+                    $sFilterValue = $aFilterValues[$i];
+                    switch($sFilter) {
+                        case 'highlights':
+                            $aCountWh['web_spotlight_idfs'] = 2;
+                            break;
+                        case 'category':
+                            $aCountWh['multi_tag'] = $sFilterValue;
+                            break;
+                        case 'state_idfs':
+                            $aCountWh['state_idfs'] = (int)$sFilterValue;
+                            break;
+                        // Date Filter
+                        case 'onlycurrent':
+                            // Set Minimum Date
+                            $aCountWh[$sFilterValue.'-greaterthanequalto'] = date('Y-m-d H:i:s',time());
+                            // If provided - set maximum date
+                            if(isset($_REQUEST['filterlimit'])) {
+                                $aCountWh[$sFilterValue.'-lessthanequalto'] = $_REQUEST['filterlimit'];
+                            }
+                            break;
+                        default:
+                            break;
+                    }
+                    $i++;
+                }
+            } else {
+                $sFilter = $_REQUEST['filter'];
+                switch($sFilter) {
+                    case 'highlights':
+                        $aCountWh['web_spotlight_idfs'] = 2;
+                        break;
+                    case 'highlightsdep':
+                        $aCountWh['web_highlight_idfs'] = 2;
+                        break;
+                    case 'category':
+                        $aCountWh['multi_tag'] = $_REQUEST['filtervalue'];
+                        break;
+                    case 'state_idfs':
+                        $aCountWh['state_idfs'] = (int)$_REQUEST['filtervalue'];
+                        break;
+                    // Date Filter
+                    case 'onlycurrent':
+                        // Set Minimum Date
+                        $aCountWh[$_REQUEST['filtervalue'].'-greaterthanequalto'] = date('Y-m-d H:i:s',time());
+                        // If provided - set maximum date
+                        if(isset($_REQUEST['filterlimit'])) {
+                            $aCountWh[$_REQUEST['filtervalue'].'-lessthanequalto'] = $_REQUEST['filterlimit'];
+                        }
+                        break;
+                    default:
+                        break;
+                }
+            }
+        }
 
 
         # Get All Tag Entities from Database

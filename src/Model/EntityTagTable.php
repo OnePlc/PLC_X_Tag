@@ -24,7 +24,8 @@ use Laminas\Db\Sql\Where;
 use Laminas\Paginator\Paginator;
 use Laminas\Paginator\Adapter\DbSelect;
 
-class EntityTagTable extends CoreEntityTable {
+class EntityTagTable extends CoreEntityTable
+{
 
     /**
      * TagTable constructor.
@@ -32,7 +33,8 @@ class EntityTagTable extends CoreEntityTable {
      * @param TableGateway $tableGateway
      * @since 1.0.0
      */
-    public function __construct(TableGateway $tableGateway) {
+    public function __construct(TableGateway $tableGateway)
+    {
         parent::__construct($tableGateway);
 
         # Set Single Form Name
@@ -46,7 +48,8 @@ class EntityTagTable extends CoreEntityTable {
      * @return Paginator Paginated Table Connection
      * @since 1.0.0
      */
-    public function fetchAll($bPaginated = false,$aWhere = [],$sSort = 'created_date DESC') {
+    public function fetchAll($bPaginated = false,$aWhere = [],$sSort = 'created_date DESC')
+    {
         $oSel = new Select($this->oTableGateway->getTable());
 
         # Build where
@@ -102,11 +105,13 @@ class EntityTagTable extends CoreEntityTable {
      * Get Tag Entity
      *
      * @param int $id
+     * @param string $sKey
      * @return mixed
      * @since 1.0.0
      */
-    public function getSingle($id) {
-        return $this->getSingleEntity($id,'Entitytag_ID');
+    public function getSingle($id, $sKey = 'Entitytag_ID')
+    {
+        return $this->getSingleEntity($id, $sKey);
     }
 
     /**
@@ -116,7 +121,8 @@ class EntityTagTable extends CoreEntityTable {
      * @return int Tag ID
      * @since 1.0.0
      */
-    public function saveSingle(EntityTag $oEntityTag) {
+    public function saveSingle(EntityTag $oEntityTag)
+    {
         $aData = [
             'entity_form_idfs' => $oEntityTag->entity_form_idfs,
             'tag_value' => $oEntityTag->tag_value,
