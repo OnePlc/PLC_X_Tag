@@ -177,19 +177,29 @@ class TagTable extends CoreEntityTable {
         $oTag = CoreController::$aCoreTables['core-tag']->select(['tag_key'=>$sTag]);
         if(count($oTag) > 0) {
             $oTag = $oTag->current();
-            $aData = [
+
+            # check if tag already exists
+            $oCheck = CoreController::$aCoreTables['core-tag']->select([
                 'entity_form_idfs'=>$sForm,
                 'tag_idfs'=>$oTag->Tag_ID, // get id from core_tag
                 'tag_value'=>$sLabel,
                 'parent_tag_idfs'=>0,
-                'created_by'=>CoreController::$oSession->oUser->getID(),
-                'created_date'=>date('Y-m-d H:i:s',time()),
-                'modified_by'=>CoreController::$oSession->oUser->getID(),
-                'modified_date'=>date('Y-m-d H:i:s',time()),
-            ];
+            ]);
+            if(count($oCheck) == 0) {
+                $aData = [
+                    'entity_form_idfs'=>$sForm,
+                    'tag_idfs'=>$oTag->Tag_ID, // get id from core_tag
+                    'tag_value'=>$sLabel,
+                    'parent_tag_idfs'=>0,
+                    'created_by'=>CoreController::$oSession->oUser->getID(),
+                    'created_date'=>date('Y-m-d H:i:s',time()),
+                    'modified_by'=>CoreController::$oSession->oUser->getID(),
+                    'modified_date'=>date('Y-m-d H:i:s',time()),
+                ];
 
-            # Insert Tag
-            CoreController::$aCoreTables['core-tag']->insert($aData);
+                # Insert Tag
+                CoreController::$aCoreTables['core-tag']->insert($aData);
+            }
 
             # Return ID
             return CoreController::$aCoreTables['core-tag']->lastInsertValue;
