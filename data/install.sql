@@ -90,7 +90,7 @@ INSERT INTO `core_form_button` (`Button_ID`, `label`, `icon`, `title`, `href`, `
 (NULL, 'Add Tag', 'fas fa-plus', 'Add Tag', '/tag/add', 'primary', '', 'tag-index', 'link', '', ''),
 (NULL, 'Merge Tags', 'fas fa-object-group', 'Merge Tags', '/tag/merge/##ID##', 'primary', '', 'tag-view', 'link', '', ''),
 (NULL, 'Add Entity Tag', 'fas fa-plus', 'Add Entity Tag', '/tag/entity/add/##ID##', 'primary', '', 'tag-view', 'link', '', ''),
-(NULL, 'Save Entity Tag', 'fas fa-save', 'Save Entity Tag', '#', 'primary saveForm', '', 'entitytag-single', 'link', '', ''),;
+(NULL, 'Save Entity Tag', 'fas fa-save', 'Save Entity Tag', '#', 'primary saveForm', '', 'entitytag-single', 'link', '', '');
 
 --
 -- TAG - Core Form Tab
