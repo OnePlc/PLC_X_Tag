@@ -1,0 +1,47 @@
+<?php
+/**
+ * merge.phtml - Main View File for Tag Merge
+ *
+ * Merge different tags to one
+ *
+ * @category Template
+ * @package Tag
+ * @author Verein onePlace
+ * @copyright (C) 2020-2021  Verein onePlace <admin@1plc.ch>
+ * @license https://opensource.org/licenses/BSD-3-Clause
+ * @version 1.0.0
+ * @since 1.0.10
+ */
+
+?>
+<h1><?=$this->translate('Merge Tags')?> - <?=$this->translate($oTag->tag_label)?></h1>
+
+
+<?= $this->partial('partial/basicform', ['sFormName'=>$sFormName]); ?>
+<script>
+    $(function() {
+        $('input[name="tag-single_tag_label"]').on('blur',function() {
+            var sNewKey = $(this).val().toLowerCase().replace(' ','-');
+            $('input[name="tag-single_tag_key"]').val(sNewKey);
+        });
+
+        $('#plc-select-tag-merge_sourcetags').select2('destroy');
+        $('#plc-select-tag-merge_sourcetags').select2({
+            ajax: {
+                url: '/tag/api/list/article-single/<?=$oTag->tag_key?>',
+                dataType: 'json'
+                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+            }
+        });
+
+        $('#plc-select-tag-merge_targettag').select2('destroy');
+        $('#plc-select-tag-merge_targettag').select2({
+            ajax: {
+                url: '/tag/api/list/article-single/<?=$oTag->tag_key?>',
+                dataType: 'json'
+                // Additional AJAX parameters go here; see the end of this chapter for the full code of this example
+            }
+        });
+
+    });
+</script>

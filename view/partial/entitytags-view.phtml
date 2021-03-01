@@ -21,7 +21,10 @@ foreach(array_keys($aTagsByForm) as $sForm) {
     <h3><?=$sForm?></h3>
     <ul class="list-group">
         <?php foreach($aTagsForForm as $oTag) { ?>
-        <li class="list-group-item"><?=$oTag->tag_value?></li>
+        <li class="list-group-item"><?=$oTag->tag_value?> - <?=$oTag->iCount?>
+        - <a href="/tag/entity/delete/<?=$oTag->Entitytag_ID?>" class="btn btn-secondary">
+                <i class="fas fa-trash"></i>
+            </a></li>
         <?php } ?>
     </ul>
 <?php

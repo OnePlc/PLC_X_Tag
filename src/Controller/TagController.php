@@ -24,7 +24,8 @@ use OnePlace\Tag\Model\TagTable;
 use Laminas\View\Model\ViewModel;
 use Laminas\Db\Adapter\AdapterInterface;
 
-class TagController extends CoreController {
+class TagController extends CoreController
+{
     /**
      * Tag Table Object
      *
@@ -58,7 +59,8 @@ class TagController extends CoreController {
      * @since 1.0.0
      * @return ViewModel - View Object with Data from Controller
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         # Set Layout based on users theme
         $this->setThemeBasedLayout('tag');
 
@@ -97,7 +99,8 @@ class TagController extends CoreController {
      * @since 1.0.0
      * @return ViewModel - View Object with Data from Controller
      */
-    public function addAction() {
+    public function addAction()
+    {
         # Set Layout based on users theme
         $this->setThemeBasedLayout('tag');
 
@@ -154,7 +157,8 @@ class TagController extends CoreController {
      * @since 1.0.0
      * @return ViewModel - View Object with Data from Controller
      */
-    public function editAction() {
+    public function editAction()
+    {
         # Set Layout based on users theme
         $this->setThemeBasedLayout('tag');
 
@@ -227,7 +231,8 @@ class TagController extends CoreController {
      * @since 1.0.0
      * @return ViewModel - View Object with Data from Controller
      */
-    public function viewAction() {
+    public function viewAction()
+    {
         # Set Layout based on users theme
         $this->setThemeBasedLayout('tag');
 
@@ -260,9 +265,33 @@ class TagController extends CoreController {
         # Load Fields for View Form
         $this->setFormFields($this->sSingleForm);
 
+        $aEntityTags = [];
+        $oEntityTagsDB = $this->getEntityTags((int)$oTag->getID());
+        if(count($oEntityTagsDB) > 0) {
+            foreach($oEntityTagsDB as $oEntTag) {
+                $iMultiCount = count(CoreController::$aCoreTables['core-entity-tag-entity']->select([
+                    'entity_tag_idfs' => $oEntTag->Entitytag_ID,
+                ]));
+                $iSingleCount = 0;
+                $sEntityType = explode('-',$oEntTag->entity_form_idfs)[0];
+                $oRootTag = CoreController::$aCoreTables['core-tag']->select(['Tag_ID' => $oEntTag->tag_idfs])->current();
+                switch($sEntityType) {
+                    case 'article':
+                        $oArtTbl = CoreController::$oServiceManager->get(\OnePlace\Article\Model\ArticleTable::class);
+                        $iSingleCount = count($oArtTbl->fetchAll(false, [$oRootTag->tag_key.'_idfs' => $oEntTag->Entitytag_ID]));
+                        break;
+                    default:
+                        break;
+                }
+                $oEntTag->iCount = $iMultiCount+$iSingleCount;
+
+                $aEntityTags[] = $oEntTag;
+            }
+        }
+
         # Get Tag Entity Tags
         $aPartialData = [
-            'aEntityTags'=>$this->getEntityTags((int)$oTag->getID()),
+            'aEntityTags'=> $aEntityTags,
         ];
         $this->setPartialData('entitytags',$aPartialData);
 
@@ -276,7 +305,14 @@ class TagController extends CoreController {
         ]);
     }
 
-    private function getEntityTags(int $iTagID) {
+    /**
+     * Get all entity tags for a certain tag
+     *
+     * @param int $iTagID
+     * @return array
+     */
+    private function getEntityTags(int $iTagID)
+    {
         $aEntityTags = [];
         $oTagsFromDB =  CoreController::$aCoreTables['core-entity-tag']->select(['tag_idfs'=>$iTagID]);
         if(count($oTagsFromDB) > 0) {
@@ -286,5 +322,84 @@ class TagController extends CoreController {
         }
 
         return $aEntityTags;
+    }
+
+    /**
+     * Merge Tags Form
+     *
+     * @since 1.0.0
+     * @return ViewModel - View Object with Data from Controller
+     */
+    public function mergeAction()
+    {
+        # Set Layout based on users theme
+        $this->setThemeBasedLayout('tag');
+
+        # Check license
+        if(!$this->checkLicense('tag')) {
+            $this->flashMessenger()->addErrorMessage('You have no active license for tag');
+            $this->redirect()->toRoute('home');
+        }
+
+        # Get Request to decide wether to save or display form
+        $oRequest = $this->getRequest();
+
+        $iTagID = $this->params()->fromRoute('id', 0);
+        $oTag = CoreController::$aCoreTables['core-tag']->select(['Tag_ID' => $iTagID])->current();
+
+        # Display Add Form
+        if(!$oRequest->isPost()) {
+            # Add Buttons for breadcrumb
+            $this->setViewButtons('tag-merge');
+
+            # Load Tabs for View Form
+            $this->setViewTabs('tag-merge');
+
+            # Load Fields for View Form
+            $this->setFormFields('tag-merge');
+
+            # Log Performance in DB
+            $aMeasureEnd = getrusage();
+            $this->logPerfomance('tag-merge',$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"utime"),$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"stime"));
+
+            return new ViewModel([
+                'sFormName' => 'tag-merge',
+                'oTag' => $oTag,
+            ]);
+        }
+
+        $this->layout('layout/json');
+
+        $aSourceTagIDs = (array)$oRequest->getPost('tag-merge_sourcetags');
+        $iTargetTagID = (int)$oRequest->getPost('tag-merge_targettag');
+
+        foreach($aSourceTagIDs as $iSourceTagID) {
+            $oEntityTag = CoreController::$aCoreTables['core-entity-tag']->select(['Entitytag_ID' => $iSourceTagID])->current();
+            $sEntityType = explode('-',$oEntityTag->entity_form_idfs)[0];
+            $oRootTag = CoreController::$aCoreTables['core-tag']->select(['Tag_ID' => $oEntityTag->tag_idfs])->current();
+
+            switch($sEntityType) {
+                case 'article':
+                    $oArtTbl = CoreController::$oServiceManager->get(\OnePlace\Article\Model\ArticleTable::class);
+                    $oArtTbl->updateAttribute($oRootTag->tag_key.'_idfs',$iTargetTagID,$oRootTag->tag_key.'_idfs',$iSourceTagID);
+                    break;
+                default:
+                    break;
+            }
+
+            CoreController::$aCoreTables['core-entity-tag-entity']->update([
+                'entity_tag_idfs' => $iTargetTagID,
+            ],[
+                'entity_tag_idfs' => $iSourceTagID,
+            ]);
+        }
+
+        # Log Performance in DB
+        $aMeasureEnd = getrusage();
+        $this->logPerfomance('tag-merge',$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"utime"),$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"stime"));
+
+        # Display Success Message and View New Tag
+        $this->flashMessenger()->addSuccessMessage('Tags successfully merged');
+        return $this->redirect()->toRoute('tag',['action'=>'view','id'=>$iTagID]);
     }
 }

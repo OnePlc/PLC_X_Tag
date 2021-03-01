@@ -177,7 +177,8 @@ class EntityTagTable extends CoreEntityTable
      * @return int id of new entry
      * @since 1.0.0
      */
-    public function addMinimal($sLabel,$sForm,$sTag) {
+    public function addMinimal($sLabel,$sForm,$sTag)
+    {
         # Stripe idfs from fieldname to get tagname
         $bIsIDFS = stripos($sTag,'_idfs');
         if($bIsIDFS === false) {
@@ -211,5 +212,20 @@ class EntityTagTable extends CoreEntityTable
         } else {
             return 0;
         }
+    }
+
+    /**
+     * Delete Entity Tag
+     *
+     * @param $iTagID
+     * @since 1.0.10
+     * @return bool
+     */
+    public function deleteSingle($iTagID)
+    {
+        # Remove Entity Tag
+        $this->oTableGateway->delete(['Entitytag_ID' => $iTagID]);
+
+        return true;
     }
 }

@@ -141,7 +141,6 @@ class ApiController extends CoreController {
             $aTagWhere['label-like'] = $_REQUEST['q'];
         }
 
-
         $aCountWh = [];
         if(isset($_REQUEST['listmodefilter'])) {
             if($_REQUEST['listmodefilter'] == 'webonly') {
@@ -208,7 +207,6 @@ class ApiController extends CoreController {
                 }
             }
         }
-
 
         # Get All Tag Entities from Database
         $oItemsDB = $this->oTableGateway->fetchAll(false,$aTagWhere);

@@ -54,6 +54,59 @@ class EntityController extends CoreController {
     }
 
     /**
+     * Delete Entity Tag
+     *
+     * @since 1.0.10
+     * @return ViewModel
+     */
+    public function deleteAction()
+    {
+        $this->setThemeBasedLayout('tag');
+
+        $id = (int) $this->params()->fromRoute('filter', 0);
+        if (!$id) {
+            return $this->redirect()->toRoute('tag');
+        }
+
+        $oRequest = $this->getRequest();
+        if ($oRequest->isPost()) {
+            $del = $oRequest->getPost('del', 'No');
+
+            if ($del == 'Yes') {
+                $id = (int) $oRequest->getPost('id');
+                $this->oTableGateway->deleteSingle($id);
+                $this->flashMessenger()->addSuccessMessage('Tag deleted successfully');
+            }
+
+            // Redirect to list of residents
+            return $this->redirect()->toRoute('tag');
+        }
+
+        $oEntityTag = CoreController::$aCoreTables['core-entity-tag']->select(['Entitytag_ID' => $id])->current();
+        $iMultiCount = count(CoreController::$aCoreTables['core-entity-tag-entity']->select([
+            'entity_tag_idfs' => $id,
+        ]));
+        $iSingleCount = 0;
+        $sEntityType = explode('-',$oEntityTag->entity_form_idfs)[0];
+        $oRootTag = CoreController::$aCoreTables['core-tag']->select(['Tag_ID' => $oEntityTag->tag_idfs])->current();
+        switch($sEntityType) {
+            case 'article':
+                $oArtTbl = CoreController::$oServiceManager->get(\OnePlace\Article\Model\ArticleTable::class);
+                $iSingleCount = count($oArtTbl->fetchAll(false, [$oRootTag->tag_key.'_idfs' => $oEntityTag->Entitytag_ID]));
+                break;
+            default:
+                break;
+        }
+        $iCount = $iMultiCount+$iSingleCount;
+
+        return new ViewModel([
+            'id'    => $id,
+            'oTag' => $this->oTableGateway->getSingle($id),
+            'iCount' => $iCount,
+        ]);
+    }
+
+    /**
      * Tag Add Form
      *
      * @since 1.0.0
