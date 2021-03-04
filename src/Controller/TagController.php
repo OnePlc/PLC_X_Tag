@@ -23,6 +23,7 @@ use OnePlace\Tag\Model\Tag;
 use OnePlace\Tag\Model\TagTable;
 use Laminas\View\Model\ViewModel;
 use Laminas\Db\Adapter\AdapterInterface;
+use Laminas\Db\Sql\Select;
 
 class TagController extends CoreController
 {
@@ -80,8 +81,10 @@ class TagController extends CoreController
         $oPaginator = $this->oTableGateway->fetchAll(true);
         $iPage = (int) $this->params()->fromQuery('page', 1);
         $iPage = ($iPage < 1) ? 1 : $iPage;
+        $iItemsPerPage = (CoreController::$oSession->oUser->getSetting('tag-index-items-per-page'))
+            ? CoreController::$oSession->oUser->getSetting('tag-index-items-per-page') : 10;
         $oPaginator->setCurrentPageNumber($iPage);
-        $oPaginator->setItemCountPerPage(3);
+        $oPaginator->setItemCountPerPage($iItemsPerPage);
 
         # Log Performance in DB
         $aMeasureEnd = getrusage();
@@ -314,7 +317,10 @@ class TagController extends CoreController
     private function getEntityTags(int $iTagID)
     {
         $aEntityTags = [];
-        $oTagsFromDB =  CoreController::$aCoreTables['core-entity-tag']->select(['tag_idfs'=>$iTagID]);
+        $oSel = new Select(CoreController::$aCoreTables['core-entity-tag']->getTable());
+        $oSel->where(['tag_idfs'=>$iTagID]);
+        $oSel->order('tag_value ASC');
+        $oTagsFromDB =  CoreController::$aCoreTables['core-entity-tag']->selectWith($oSel);
         if(count($oTagsFromDB) > 0) {
             foreach($oTagsFromDB as $oEntityTag) {
                 $aEntityTags[] = $oEntityTag;
