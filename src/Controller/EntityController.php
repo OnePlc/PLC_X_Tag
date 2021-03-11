@@ -40,7 +40,8 @@ class EntityController extends CoreController {
      * @param TagTable $oTableGateway
      * @since 1.0.0
      */
-    public function __construct(AdapterInterface $oDbAdapter,EntityTagTable $oTableGateway,$oServiceManager) {
+    public function __construct(AdapterInterface $oDbAdapter,EntityTagTable $oTableGateway,$oServiceManager)
+    {
         $this->oTableGateway = $oTableGateway;
         $this->sSingleForm = 'entitytag-single';
         parent::__construct($oDbAdapter,$oTableGateway,$oServiceManager);
@@ -112,7 +113,8 @@ class EntityController extends CoreController {
      * @since 1.0.0
      * @return ViewModel - View Object with Data from Controller
      */
-    public function addAction() {
+    public function addAction()
+    {
         # Set Layout based on users theme
         $this->setThemeBasedLayout('tag');
 
@@ -174,7 +176,8 @@ class EntityController extends CoreController {
      * @since 1.0.0
      * @return ViewModel - View Object with Data from Controller
      */
-    public function editAction() {
+    public function editAction()
+    {
         # Set Layout based on users theme
         $this->setThemeBasedLayout('tag');
 
@@ -247,7 +250,8 @@ class EntityController extends CoreController {
      * @since 1.0.0
      * @return ViewModel - View Object with Data from Controller
      */
-    public function viewAction() {
+    public function viewAction()
+    {
         # Set Layout based on users theme
         $this->setThemeBasedLayout('tag');
 
@@ -296,7 +300,15 @@ class EntityController extends CoreController {
         ]);
     }
 
-    private function getEntityTags(int $iTagID) {
+    /**
+     * Get all Entity Tags for a specific tag
+     *
+     * @param int $iTagID
+     * @since 1.0.0
+     * @return array list of matching entity tags
+     */
+    private function getEntityTags(int $iTagID)
+    {
         $aEntityTags = [];
         $oTagsFromDB =  CoreController::$aCoreTables['core-entity-tag']->select(['tag_idfs'=>$iTagID]);
         if(count($oTagsFromDB) > 0) {

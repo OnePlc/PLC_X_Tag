@@ -26,7 +26,8 @@ use Laminas\Db\Sql\Select;
 use Zend\I18n\Translator\Translator;
 
 
-class ApiController extends CoreController {
+class ApiController extends CoreController
+{
     /**
      * Tag Table Object
      *
@@ -41,7 +42,8 @@ class ApiController extends CoreController {
      * @param TagTable $oTableGateway
      * @since 1.0.0
      */
-    public function __construct(AdapterInterface $oDbAdapter,EntityTagTable $oTableGateway,$oServiceManager) {
+    public function __construct(AdapterInterface $oDbAdapter,EntityTagTable $oTableGateway,$oServiceManager)
+    {
         parent::__construct($oDbAdapter,$oTableGateway,$oServiceManager);
         $this->oTableGateway = $oTableGateway;
         $this->sSingleForm = 'tag-single';
@@ -53,7 +55,8 @@ class ApiController extends CoreController {
      * @return bool - no View File
      * @since 1.0.0
      */
-    public function indexAction() {
+    public function indexAction()
+    {
         $this->layout('layout/json');
 
         # Check license
@@ -75,7 +78,8 @@ class ApiController extends CoreController {
      * @return bool - no View File
      * @since 1.0.0
      */
-    public function listAction() {
+    public function listAction()
+    {
         $this->layout('layout/json');
 
         # Check license
@@ -273,7 +277,8 @@ class ApiController extends CoreController {
      * @return bool - no View File
      * @since 1.0.0
      */
-    public function getAction() {
+    public function getAction()
+    {
         $this->layout('layout/json');
 
         # Check license
