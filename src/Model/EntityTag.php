@@ -50,6 +50,14 @@ class EntityTag extends CoreEntityModel {
      */
     public $entity_form_idfs;
 
+    /**
+     * Tag_value translatable
+     *
+     * @var boolean if string is translatable
+     * @since 1.0.10
+     */
+    public $translatable;
+
 
     /**
      * Tag constructor.
@@ -79,6 +87,7 @@ class EntityTag extends CoreEntityModel {
         $this->tag_idfs = !empty($aData['tag_idfs']) ? $aData['tag_idfs'] : 0;
         $this->parent_tag_idfs = !empty($aData['parent_tag_idfs']) ? $aData['parent_tag_idfs'] : 0;
         $this->entity_form_idfs = !empty($aData['entity_form_idfs']) ? $aData['entity_form_idfs'] : '';
+        $this->translatable = !empty($aData['translatable']) ? $aData['translatable'] : 0;
 
         $this->updateDynamicFields($aData);
     }

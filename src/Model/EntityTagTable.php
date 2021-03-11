@@ -127,6 +127,7 @@ class EntityTagTable extends CoreEntityTable
             'entity_form_idfs' => $oEntityTag->entity_form_idfs,
             'tag_value' => $oEntityTag->tag_value,
             'tag_idfs' => $oEntityTag->tag_idfs,
+            'translatable' => $oEntityTag->translatable,
             'parent_tag_idfs' => $oEntityTag->parent_tag_idfs,
         ];
 

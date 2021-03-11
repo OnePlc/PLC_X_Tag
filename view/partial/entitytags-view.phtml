@@ -20,11 +20,38 @@ foreach(array_keys($aTagsByForm) as $sForm) {
     $aTagsForForm = $aTagsByForm[$sForm]; ?>
     <h3><?=$sForm?></h3>
     <ul class="list-group">
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-md-8">
+                    <b><?=$this->translate('Name')?></b>
+                </div>
+                <div class="col-md-1">
+                    <b><?=$this->translate('Entities using this tag')?></b>
+                </div>
+                <div class="col-md-3 text-right">
+                    <b><?=$this->translate('Tasks')?></b>
+                </div>
+            </div>
+        </li>
         <?php foreach($aTagsForForm as $oTag) { ?>
-        <li class="list-group-item"><?=$oTag->tag_value?> - <?=$oTag->iCount?>
-        - <a href="/tag/entity/delete/<?=$oTag->Entitytag_ID?>" class="btn btn-secondary">
-                <i class="fas fa-trash"></i>
-            </a></li>
+        <li class="list-group-item">
+            <div class="row">
+                <div class="col-md-8">
+                    <?=($oTag->translatable == 2) ? $this->translate($oTag->tag_value) : $oTag->tag_value?>
+                </div>
+                <div class="col-md-1">
+                    <?=$oTag->iCount?>
+                </div>
+                <div class="col-md-3 text-right">
+                    <a href="/tag/entity/edit/<?=$oTag->Entitytag_ID?>" class="btn btn-secondary">
+                        <i class="fas fa-edit"></i>
+                    </a> |
+                    <a href="/tag/entity/delete/<?=$oTag->Entitytag_ID?>" class="btn btn-secondary">
+                        <i class="fas fa-trash"></i>
+                    </a>
+                </div>
+            </div>
+        </li>
         <?php } ?>
     </ul>
 <?php

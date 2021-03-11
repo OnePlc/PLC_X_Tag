@@ -80,8 +80,10 @@ class TagController extends CoreController
         $oPaginator = $this->oTableGateway->fetchAll(true);
         $iPage = (int) $this->params()->fromQuery('page', 1);
         $iPage = ($iPage < 1) ? 1 : $iPage;
+        $iItemsPerPage = (CoreController::$oSession->oUser->getSetting('tag-index-items-per-page'))
+            ? CoreController::$oSession->oUser->getSetting('tag-index-items-per-page') : 10;
         $oPaginator->setCurrentPageNumber($iPage);
-        $oPaginator->setItemCountPerPage(3);
+        $oPaginator->setItemCountPerPage($iItemsPerPage);
 
         # Log Performance in DB
         $aMeasureEnd = getrusage();
@@ -278,7 +280,15 @@ class TagController extends CoreController
                 switch($sEntityType) {
                     case 'article':
                         $oArtTbl = CoreController::$oServiceManager->get(\OnePlace\Article\Model\ArticleTable::class);
-                        $iSingleCount = count($oArtTbl->fetchAll(false, [$oRootTag->tag_key.'_idfs' => $oEntTag->Entitytag_ID]));
+                        try {
+                            $iSingleCount = count($oArtTbl->fetchAll(false, [$oRootTag->tag_key.'_idfs' => $oEntTag->Entitytag_ID]));
+                        } catch(\RuntimeException $e) {
+                            try {
+                                $iSingleCount = count($oArtTbl->fetchAll(false, ['multi_tag'=> $oEntTag->Entitytag_ID]));
+                            } catch(\RuntimeException $e) {
+                                $iSingleCount = 0;
+                            }
+                        }
                         break;
                     default:
                         break;

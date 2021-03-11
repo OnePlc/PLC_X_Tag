@@ -33,6 +33,7 @@ CREATE TABLE `core_entity_tag` (
   `tag_key` varchar(100) NOT NULL DEFAULT '',
   `tag_color` varchar(10) NOT NULL DEFAULT '',
   `tag_icon` varchar(25) NOT NULL DEFAULT '',
+  `translatable` INT(1) NOT NULL DEFAULT '2',
   `parent_tag_idfs` int(11) NOT NULL DEFAULT 0,
   `created_by` int(11) NOT NULL,
   `created_date` datetime NOT NULL,
@@ -70,6 +71,7 @@ INSERT INTO `permission` (`permission_key`, `module`, `label`, `nav_label`, `nav
 ('delete', 'OnePlace\\Tag\\Controller\\TagController', 'View', '', '', 0),
 ('merge', 'OnePlace\\Tag\\Controller\\TagController', 'Merge', '', '', 0),
 ('add', 'OnePlace\\Tag\\Controller\\EntityController', 'Add', '', '', 0),
+('edit', 'OnePlace\\Tag\\Controller\\EntityController', 'Edit', '', '', 0),
 ('delete', 'OnePlace\\Tag\\Controller\\EntityController', 'Delete', '', '', 0);
 
 --
@@ -109,6 +111,7 @@ INSERT INTO `core_form_field` (`Field_ID`, `type`, `label`, `fieldkey`, `tab`, `
 (NULL, 'text', 'Key', 'tag_key', 'tag-base', 'tag-single', 'col-md-3', '/tag/view/##ID##', '', 0, 1, 1, '', '', ''),
 (NULL, 'partial', 'Entity Tags', 'entitytags', 'tag-entitytags', 'tag-single', 'col-md-12', '', '', '0', '1', '0', '', '', ''),
 (NULL, 'text', 'Name', 'tag_value', 'entitytag-base', 'entitytag-single', 'col-md-3', '/tag/entity/view/##ID##', '', '0', '1', '0', '', '', ''),
+(NULL, 'select', 'translatable', 'translatable', 'entitytag-base', 'entitytag-single', 'col-md-1', '', '/application/selectbool', 0, 1, 0, '', 'OnePlace\\BoolSelect', ''),
 (NULL, 'text', 'Form Name', 'entity_form_idfs', 'entitytag-base', 'entitytag-single', 'col-md-3', '', '', '0', '1', '0', '', '', ''),
 (NULL, 'multiselect', 'Source Tags', 'sourcetags', 'tag-mergebase', 'tag-merge', 'col-md-12', '', '/tag/api/list/article-single/category', 0, 1, 0, 'entitytag-single', 'OnePlace\\Tag\\Model\\EntityTagTable', 'add-OnePlace\\Tag\\Controller\\TagController'),
 (NULL, 'select', 'Target Tag', 'targettag', 'tag-mergebase', 'tag-merge', 'col-md-12', '', '/tag/api/list/article-single/category', 0, 1, 0, 'entitytag-single', 'OnePlace\\Tag\\Model\\EntityTagTable', 'add-OnePlace\\Tag\\Controller\\TagController');

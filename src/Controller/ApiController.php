@@ -99,20 +99,37 @@ class ApiController extends CoreController {
         $sLang = 'en_US';
         if(isset($_REQUEST['lang'])) {
             $sLang = $_REQUEST['lang'];
+        } elseif(isset(CoreController::$oSession->oUser)) {
+            $sLang = CoreController::$oSession->oUser->getLang();
         }
 
         $sEntityType = 'entitytag';
 
-        // translating system
-        $translator = new Translator();
-        $aLangs = ['en_US','de_DE'];
-        foreach($aLangs as $sLoadLang) {
-            if(file_exists('vendor/oneplace/oneplace-translation/language/'.$sLoadLang.'.mo')) {
-                $translator->addTranslationFile('gettext', 'vendor/oneplace/oneplace-translation/language/'.$sLang.'.mo', $sEntityType, $sLoadLang);
+        /**
+         * backwards compatible will be removed later
+         * as of Core Release 1.0.33 where aTranslator
+         * will be added
+         */
+        if(!isset(CoreController::$oTranslator)) {
+            // translating system
+            $translator = new Translator();
+            $aLangs = ['en_US','de_DE'];
+            foreach($aLangs as $sLoadLang) {
+                if(file_exists('vendor/oneplace/oneplace-translation/language/'.$sLoadLang.'.mo')) {
+                    $translator->addTranslationFile('gettext', 'vendor/oneplace/oneplace-translation/language/'.$sLang.'.mo', $sEntityType, $sLoadLang);
+                }
+            }
+            $translator->setLocale($sLang);
+        } else {
+            $translator = CoreController::$oTranslator;
+            $aLangs = ['en_US','de_DE'];
+            foreach($aLangs as $sLoadLang) {
+                if(file_exists('vendor/oneplace/oneplace-translation/language/'.$sLoadLang.'.mo')) {
+                    $translator->addTranslationFile('gettext', 'vendor/oneplace/oneplace-translation/language/'.$sLang.'.mo', $sEntityType, $sLoadLang);
+                }
             }
         }
 
-        $translator->setLocale($sLang);
 
         /**
          * todo: enforce to use /api/contact instead of /contact/api so we can do security checks in main api controller
@@ -213,7 +230,11 @@ class ApiController extends CoreController {
         if(count($oItemsDB) > 0) {
             foreach($oItemsDB as $oItem) {
                 if($bSelect2) {
-                    $aItems[] = ['id'=>$oItem->getID(),'text'=>$oItem->getLabel()];
+                    $sVal = $oItem->getLabel();
+                    if($oItem->translatable == 1) {
+                        $sVal = $translator->translate($oItem->getLabel(),$sEntityType,$sLang);
+                    }
+                    $aItems[] = ['id'=>$oItem->getID(),'text'=>$sVal];
                 } elseif($sListMode == 'info') {
                     $oCountSel = new Select(CoreController::$aCoreTables['core-entity-tag-entity']->getTable());
                     $oCountSel->join(['article' => 'article'],'article.Article_ID = core_entity_tag_entity.entity_idfs');

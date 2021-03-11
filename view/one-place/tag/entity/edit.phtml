@@ -1,13 +1,11 @@
-<h1>Add new entity tag</h1>
+<h1><?=$this->translate('Edit Entity Tag')?></h1>
 
-<?= $this->partial('partial/basicform', ['sFormName'=>$sFormName,'iRefIDFS'=>$iTagID]); ?>
+<?= $this->partial('partial/basicform', ['sFormName'=>$sFormName,'oItem'=>$oTag]); ?>
 <script>
 $(function() {
     $('input[name="tag-single_tag_label"]').on('blur',function() {
         var sNewKey = $(this).val().toLowerCase().replace(' ','-');
         $('input[name="tag-single_tag_key"]').val(sNewKey);
     });
-
-    $('select[name="entitytag-single_translatable"]').append('<option value="2">Ja</option>').trigger("change");
 });
 </script>

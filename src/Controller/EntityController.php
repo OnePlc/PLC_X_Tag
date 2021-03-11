@@ -169,7 +169,7 @@ class EntityController extends CoreController {
     }
 
     /**
-     * Tag Edit Form
+     * Entity Tag Edit Form
      *
      * @since 1.0.0
      * @return ViewModel - View Object with Data from Controller
@@ -189,9 +189,8 @@ class EntityController extends CoreController {
 
         # Display Edit Form
         if(!$oRequest->isPost()) {
-
             # Get Tag ID from URL
-            $iTagID = $this->params()->fromRoute('id', 0);
+            $iTagID = $this->params()->fromRoute('filter', 0);
 
             # Try to get Tag
             try {
@@ -205,7 +204,7 @@ class EntityController extends CoreController {
             $this->setViewEntity($oTag);
 
             # Add Buttons for breadcrumb
-            $this->setViewButtons('tag-single');
+            $this->setViewButtons($this->sSingleForm);
 
             # Load Tabs for View Form
             $this->setViewTabs($this->sSingleForm);
@@ -215,7 +214,7 @@ class EntityController extends CoreController {
 
             # Log Performance in DB
             $aMeasureEnd = getrusage();
-            $this->logPerfomance('tag-edit',$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"utime"),$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"stime"));
+            $this->logPerfomance('entitytag-edit',$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"utime"),$this->rutime($aMeasureEnd,CoreController::$aPerfomanceLogStart,"stime"));
 
             return new ViewModel([
                 'sFormName' => $this->sSingleForm,
@@ -230,6 +229,7 @@ class EntityController extends CoreController {
         $oTag = $this->attachFormData($_REQUEST,$oTag);
 
         # Save Tag
+        $iParentTag = $oTag->tag_idfs;
         $iTagID = $this->oTableGateway->saveSingle($oTag);
 
         # Log Performance in DB
@@ -238,7 +238,7 @@ class EntityController extends CoreController {
 
         # Display Success Message and View New User
         $this->flashMessenger()->addSuccessMessage('Tag successfully saved');
-        return $this->redirect()->toRoute('tag',['action'=>'view','id'=>$iTagID]);
+        return $this->redirect()->toRoute('tag',['action'=>'view','id'=>$iParentTag]);
     }
 
     /**
