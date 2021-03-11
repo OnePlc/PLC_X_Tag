@@ -1,0 +1,35 @@
+<?php
+/**
+ * delete.phtml - Delete Resident
+ *
+ * View File for Delete Resident Form
+ *
+ * @category View
+ * @package Resident
+ * @author Nathanael Kammermann
+ * @copyright (C) 2019 Nathanael Kammermann <nathanael.kammermann@gmail.com>
+ * @license https://opensource.org/licenses/BSD-3-Clause
+ * @version 1.0
+ * @since File available since Version 1.0
+ */
+
+$title = 'Delete Tag';
+$url   = $this->url('tag', ['action' => 'delete', 'id' =>  $oTag->getID()]);
+
+$this->headTitle($title);
+?>
+<h1><?= $this->escapeHtml($title) ?></h1>
+
+<p>
+    Are you sure you want to remove
+    "<?= $this->escapeHtml($oTag->getLabel()) ?>"?
+    <b class="text-danger">THIS CANNOT BE UNDONE</b>
+</p>
+
+<form action="<?= $url ?>" method="post">
+    <div class="form-group">
+        <input type="hidden" name="id" value="<?= (int) $oTag->getID() ?>" />
+        <input type="submit" class="btn btn-danger" name="del" value="Yes" />
+        <input type="submit" class="btn btn-success" name="del" value="No" />
+    </div>
+</form>
